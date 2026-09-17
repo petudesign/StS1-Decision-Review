@@ -1,0 +1,10 @@
+{
+  "modid": "spirecoach",
+  "name": "Spire Coach",
+  "author_list": ["Spire Coach"],
+  "description": "A learning-first combat review that explains meaningful decisions after they happen.",
+  "version": "0.1.0",
+  "sts_version": "12-18-2022",
+  "mts_version": "3.30.0",
+  "dependencies": ["basemod"]
+}

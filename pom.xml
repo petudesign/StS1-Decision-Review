@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>spirecoach</groupId>
+    <artifactId>spirecoach</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>Spire Coach</name>
+    <description>Learning-first combat review for Slay the Spire.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- Override these with -D... when building on another machine. -->
+        <sts.jar>${env.STS_JAR}</sts.jar>
+        <basemod.jar>${env.BASEMOD_JAR}</basemod.jar>
+        <modthespire.jar>${env.MODTHESPIRE_JAR}</modthespire.jar>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>SpireCoach</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+      The domain model and coaching rules intentionally compile without the game.
+      Add -Dgame-build=true after configuring the three jar paths to compile the
+      ModTheSpire/BaseMod integration too.
+    -->
+    <profiles>
+        <profile>
+            <id>game-build</id>
+            <activation>
+                <property>
+                    <name>game-build</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.megacrit.cardcrawl</groupId>
+                    <artifactId>slaythespire</artifactId>
+                    <version>1.0</version>
+                    <scope>system</scope>
+                    <systemPath>${sts.jar}</systemPath>
+                </dependency>
+                <dependency>
+                    <groupId>basemod</groupId>
+                    <artifactId>basemod</artifactId>
+                    <version>5.44.0</version>
+                    <scope>system</scope>
+                    <systemPath>${basemod.jar}</systemPath>
+                </dependency>
+                <dependency>
+                    <groupId>com.evacipated.cardcrawl</groupId>
+                    <artifactId>modthespire</artifactId>
+                    <version>3.30.0</version>
+                    <scope>system</scope>
+                    <systemPath>${modthespire.jar}</systemPath>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>add-game-source</id>
+                                <phase>generate-sources</phase>
+                                <goals><goal>add-source</goal></goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/game/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
