@@ -4,3 +4,8 @@ target/
 logs/
 .idea/
 *.iml
+
+# Environment variables
+.env
+.env.*
+!.env.example
